@@ -50,6 +50,7 @@ const Update = (props) => {
             <Modal
                 isOpen={props.isOpen}
                 contentLabel="Example Modal" >
+                    <div style={{ marginTop: "100px", marginLeft: "200px" }}>
                 <section className="text-gray-600 body-font">
                     <ToastContainer />
                     <h2>UPDATE SALARY OF EMPLOYEE</h2>
@@ -60,6 +61,7 @@ const Update = (props) => {
                     <button className="btn btn-primary text-center item-center" onClick={handleSubmit}>Update</button>
                 </section>
                 <button className="btn btn-danger text-center my-5" onClick={props.toggle}>close</button>
+                </div>
             </Modal>
         </div>
     )

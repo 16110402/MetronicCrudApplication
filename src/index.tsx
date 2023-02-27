@@ -14,7 +14,8 @@ import {MetronicI18nProvider} from './_metronic/i18n/Metronici18n'
 import './_metronic/assets/sass/plugins.scss'
 import './_metronic/assets/sass/style.scss'
 import './_metronic/assets/sass/style.react.scss'
-import {EmpRoutes} from './app/routing/EmpRoutes'
+// import {EmpRoutes} from './app/routing/EmpRoutes'
+import {AppRoutes} from './app/routing/AppRoutes'
 import {AuthProvider, setupAxios} from './app/modules/auth'
 import {ThemeModeProvider} from './_metronic/partials/layout/theme-mode/ThemeModeProvider'
 /**
@@ -39,8 +40,8 @@ if (container) {
       <MetronicI18nProvider>
         <ThemeModeProvider>
           <AuthProvider>
-            <EmpRoutes />
-            {/* <AppRoutes /> */}
+            {/* <EmpRoutes /> */}
+            <AppRoutes />
           </AuthProvider>
         </ThemeModeProvider>
       </MetronicI18nProvider>
