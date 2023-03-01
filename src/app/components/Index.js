@@ -10,6 +10,8 @@ const Index = () => {
     const [country, setCountry] = useState([])
     const [state, setState] = useState([])
     const [city, setCity] = useState([])
+    const [scode, setScode] = useState()
+    const [ccode, setCcode] = useState()
     const [credentials, setCredentials] = useState({ name: "", age: "", email: "", salary: "", country: "", state: "", city: "" })
 
     const handleSubmit = async (e) => {
@@ -72,49 +74,103 @@ const Index = () => {
     }
     const onChange = (e) => {
         // setCredentials({name:"e.target.name" , district:"e.target.email", place:"e.target.district", nearground:"e.target.nearground", distance:"e.target.distance" ,password:"e.target.password",confirmpassword:"e.target.confirmpassword"})
-        setCredentials({ ...credentials, [e.target.name]: e.target.value })
+        if(e.target.name=="country")        
+        {
+            let vc = e.target.value;
+            const states = State.getAllStates();
+            // var t1 = vc.split(',').shift();
+            let t1 = "", t2 = "";
+            let j = 0;
+            while(vc[j]!=',')
+            {
+                t1 = t1 + vc[j];
+                j++;
+            }
+            j++;
+            while(j<vc.length)
+            {
+                t2 = t2+vc[j];
+                j++;
+            }
+            // console.log(states);
+            let p1 = [];
+            for(let i=0;i<states.length;i++)
+            {
+                   if(states[i].countryCode==t1)
+                   {
+                       p1.push({stateCode: states[i].isoCode, name: states[i].name});
+                    //    console.log(states[i].isoCode, states[i].name);
+                   }
+            }
+            setState(p1);
+            e.target.value = t2;
+            // console.log(e.target.value.p1,"e.target.value.p1")
+            // setScode(e.target.value.p1);
+        }
+        if(e.target.name=="state")
+        {
+            let vc = e.target.value;
+            // var t1 = vc.split(',').shift();
+            let t1 = "", t2 = "";
+            let j = 0;
+            while(vc[j]!=',')
+            {
+                t1 = t1 + vc[j];
+                j++;
+            }
+            j++;
+            while(j<vc.length)
+            {
+                t2 = t2+vc[j];
+                j++;
+            }
+            let p2 = [];
+            const cities = City.getAllCities()
+            for(let i=0;i<cities.length;i++)
+            {
+                    if(cities[i].stateCode==t1)
+                    {
+                        p2.push(cities[i].name);
+                        // console.log(cities[i].name);
+                    }
+            }
+            setCity(p2);
+            e.target.value = t2;
+        }
+        setCredentials({ ...credentials, [e.target.name]: e.target.value.cntCode })
     }
     useEffect(() => {
     const countries = Country.getAllCountries()
     let p = [];
     for(let i=0;i<countries.length;i++)
     {
-           p.push(countries[i].name);
-        //    console.log(countries[i].name);
+           p.push({countryCode: countries[i].isoCode, name: countries[i].name});
+        //    console.log(countries[i].countryCode, countries[i].name);
     }
     setCountry(p);
-    const states = State.getAllStates()
-    let p1 = [];
-    for(let i=0;i<states.length;i++)
-    {
-           p1.push(states[i].name);
-        //    console.log(states[i].name);
-    }
-    setState(p1);
+    // const states = State.getAllStates();
+    // let p1 = [];
+    // for(let i=0;i<states.length;i++)
+    // {
+    //        if(states[i].countryCode=="IN")
+    //        {
+    //         //    p1.push({stateCode: states[i].stateCode, name: states[i].name});
+    //            console.log(states[i].countryCode, states[i].isoCode, states[i].name);
+    //        }
+    // }
+    // setState(p1);
     // const cities = City.getAllCities();
     // let p2 = [];
+    // const cities = City.getAllCities()
     // for(let i=0;i<cities.length;i++)
     // {
-    //        p1.push(cities[i].name);
-    //     //    console.log(cities[i].name);
+    //         if(cities[i].stateCode=="UP")
+    //         {
+    //             p2.push(cities[i].name);
+    //             // console.log(cities[i].name);
+    //         }
     // }
     // setCity(p2);
-    // console.log(State.getStateByCodeAndCountry("UP", "IN"))
-    // const cities = City.getAllCities()
-    // const newCity = City.getCitiesOfState("IN","UP")
-    // console.log(newCity[0].name)
-    // for(let i=0;i<cities.length;i++)
-    // {
-    //         console.log(newCity[i].name);
-    // }
-    // for(let i=0;i<cities.length;i++)
-    // {
-    //     if(cities[i].countryCode=="IN")
-    //     {
-    //       console.log(cities[i]);
-    //     }
-    // }
-    // console.log(State.getCityByCode("IN"));
     }, []);
     return (
         <div className="container" style={{ marginTop: "100px" }}>
@@ -135,9 +191,9 @@ const Index = () => {
                                         onChange={onChange} type="number" id="age" name="age" className="border-b-2 border-stone-400 text-stone-400 w-36" />
                                     {/* <p className="text-sm text-stone-400 mt-6">Country</p> <input
                                         onChange={onChange} type="text" id="country" name="country" className="border-b-2 border-stone-400 text-stone-400 w-36" /> */}
-                                    <select className="form-select my-3" name="place" defaultValue={'DEFAULT'} onChange={onChange} aria-label="Default select example">
+                                    <select className="form-select my-3" name="country" defaultValue={'DEFAULT'} onChange={onChange} aria-label="Default select example">
                                         <option value="Default">Choose Your Country</option>
-                                        {country.map(place => <option key={place} value={place}>{place}</option>)}
+                                        {country.map(place1 => <option id={place1.name} key={place1.name} value={[place1.countryCode,place1.name]}>{place1.name}</option>)}
                                     </select>
                                 </div>
                                 <div className="m-6 ">
@@ -147,19 +203,19 @@ const Index = () => {
                                         onChange={onChange} type="number" id="salary" name="salary" className="border-b-2 border-stone-400 text-stone-400 w-36" />
                                     {/* <p className="text-sm text-stone-400 mt-6">State</p> <input
                                         onChange={onChange} type="text" id="state" name="state" className="border-b-2 border-stone-400 text-stone-400 w-36" /> */}
-                                        <select className="form-select my-3" defaultValue={'DEFAULT'} name="place" onChange={onChange} aria-label="Default select example">
+                                        <select className="form-select my-3" defaultValue={'DEFAULT'} name="state" onChange={onChange} aria-label="Default select example">
                                         <option value="Default">Choose Your State</option>
-                                        {state.map(place => <option key={place} value={place}>{place}</option>)}
+                                        {state.map(place2 => <option id={place2.name} key={place2.name} value={[place2.stateCode,place2.name]}>{place2.name}</option>)}
                                     </select>
                                 </div>
                             </div>
                             <div className="m-6 ">
-                                <p className="text-sm text-stone-400 mt-6 ">City</p> <input
-                                    onChange={onChange} type="text" id="city" name="city" className="border-b-2 border-stone-400 text-stone-400 w-36" />
-                                    {/* <select className="form-select my-3" name="place" onChange={onChange} aria-label="Default select example">
-                                        <option selected>Choose Your State</option>
+                                {/* <p className="text-sm text-stone-400 mt-6 ">City</p> <input
+                                    onChange={onChange} type="text" id="city" name="city" className="border-b-2 border-stone-400 text-stone-400 w-36" /> */}
+                                    <select className="form-select my-3" name="city" onChange={onChange} aria-label="Default select example">
+                                        <option selected>Choose Your City</option>
                                         {city.map(place => <option key={place} value={place}>{place}</option>)}
-                                    </select> */}
+                                    </select>
                                 <button type="submit" onClick={handleSubmit} className="group relative my-3 flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                                     <span className="absolute inset-y-0 left-0 flex items-center pl-3">
                                     </span>
