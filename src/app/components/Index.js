@@ -74,12 +74,13 @@ const Index = () => {
     }
     const onChange = (e) => {
         // setCredentials({name:"e.target.name" , district:"e.target.email", place:"e.target.district", nearground:"e.target.nearground", distance:"e.target.distance" ,password:"e.target.password",confirmpassword:"e.target.confirmpassword"})
+        let t2 = "";
         if(e.target.name=="country")        
         {
-            let vc = e.target.value;
+            const vc = e.target.value;
             const states = State.getAllStates();
             // var t1 = vc.split(',').shift();
-            let t1 = "", t2 = "";
+            let t1 = "";
             let j = 0;
             while(vc[j]!=',')
             {
@@ -103,7 +104,6 @@ const Index = () => {
                    }
             }
             setState(p1);
-            e.target.value = t2;
             // console.log(e.target.value.p1,"e.target.value.p1")
             // setScode(e.target.value.p1);
         }
@@ -111,7 +111,7 @@ const Index = () => {
         {
             let vc = e.target.value;
             // var t1 = vc.split(',').shift();
-            let t1 = "", t2 = "";
+            let t1 = "";
             let j = 0;
             while(vc[j]!=',')
             {
@@ -135,9 +135,9 @@ const Index = () => {
                     }
             }
             setCity(p2);
-            e.target.value = t2;
         }
-        setCredentials({ ...credentials, [e.target.name]: e.target.value.cntCode })
+        if(t2.length==0) t2 = e.target.value;
+        setCredentials({ ...credentials, [e.target.name]: t2 })
     }
     useEffect(() => {
     const countries = Country.getAllCountries()
@@ -193,7 +193,7 @@ const Index = () => {
                                         onChange={onChange} type="text" id="country" name="country" className="border-b-2 border-stone-400 text-stone-400 w-36" /> */}
                                     <select className="form-select my-3" name="country" defaultValue={'DEFAULT'} onChange={onChange} aria-label="Default select example">
                                         <option value="Default">Choose Your Country</option>
-                                        {country.map(place1 => <option id={place1.name} key={place1.name} value={[place1.countryCode,place1.name]}>{place1.name}</option>)}
+                                        {country.map(place1 => <option key={place1.name} value={[place1.countryCode,place1.name]}>{place1.name}</option>)}
                                     </select>
                                 </div>
                                 <div className="m-6 ">
@@ -205,7 +205,7 @@ const Index = () => {
                                         onChange={onChange} type="text" id="state" name="state" className="border-b-2 border-stone-400 text-stone-400 w-36" /> */}
                                         <select className="form-select my-3" defaultValue={'DEFAULT'} name="state" onChange={onChange} aria-label="Default select example">
                                         <option value="Default">Choose Your State</option>
-                                        {state.map(place2 => <option id={place2.name} key={place2.name} value={[place2.stateCode,place2.name]}>{place2.name}</option>)}
+                                        {state.map(place2 => <option key={place2.name} value={[place2.stateCode,place2.name]}>{place2.name}</option>)}
                                     </select>
                                 </div>
                             </div>
@@ -214,7 +214,7 @@ const Index = () => {
                                     onChange={onChange} type="text" id="city" name="city" className="border-b-2 border-stone-400 text-stone-400 w-36" /> */}
                                     <select className="form-select my-3" name="city" onChange={onChange} aria-label="Default select example">
                                         <option selected>Choose Your City</option>
-                                        {city.map(place => <option key={place} value={place}>{place}</option>)}
+                                        {city.map(place3 => <option key={place3} value={place3}>{place3}</option>)}
                                     </select>
                                 <button type="submit" onClick={handleSubmit} className="group relative my-3 flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                                     <span className="absolute inset-y-0 left-0 flex items-center pl-3">
