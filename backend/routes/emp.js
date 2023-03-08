@@ -14,14 +14,14 @@ router.post('/createemp', [
 ], async (req, res) => {
   //if there are errors, return Bad request and the errors
   // console.log(req.body, "req");
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    let msg = errors.array();
-    let msg1 = msg[0].msg;
-    console.log(msg1,"eroooo");
-    return res.status(400).json({ errors: msg1, error: "401" });
-  }
   try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      let msg = errors.array();
+      let msg1 = msg[0].msg;
+      console.log(msg1,"eroooo");
+      return res.status(400).json({ errors: msg1, error: "401" });
+    }
     // Check whether the user with this employee exists already
     let employee = await Employee.findOne({ email: req.body.email });
     if (employee) {
@@ -58,9 +58,13 @@ router.post('/createemp', [
 
 router.post('/fetchemployee', async (req, res) => {
   try {
-    let emps = await Employee.find().sort({ "age": 1 });
-    console.log(emps, "empsb");
-    res.status(200).json(emps);
+    let page = req.body.page;
+    let emps = Employee.find().sort({ "age": 1 });
+    const limit = 10;
+    let skip = (page - 1) * limit;
+    let empData = await emps.skip(skip).limit(limit);
+    console.log(empData, "empsb");
+    res.status(200).json(empData);
   }
   catch (error) {
     console.error(error.message);
