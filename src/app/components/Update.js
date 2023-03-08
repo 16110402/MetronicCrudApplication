@@ -10,6 +10,19 @@ const Update = (props) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const { salary } = credentials;
+        if(salary.length==0)
+        {
+            toast.error('Enter Salary!', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+            return;
+        }
         const response = await fetch(`http://localhost:5000/api/emp/updateemp`, {
             method: 'POST',
             headers: {

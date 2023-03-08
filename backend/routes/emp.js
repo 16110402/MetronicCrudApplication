@@ -63,7 +63,6 @@ router.post('/fetchemployee', async (req, res) => {
     const limit = 10;
     let skip = (page - 1) * limit;
     let empData = await emps.skip(skip).limit(limit);
-    console.log(empData, "empsb");
     res.status(200).json(empData);
   }
   catch (error) {

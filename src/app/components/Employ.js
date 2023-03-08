@@ -55,6 +55,7 @@ const Employ = () => {
     const [emp, setEmp] = useState([])
     const [page, setPage] = useState(1)
     const [i, setI] = useState(1)
+    const [nextE, setNextE] = useState(9)
     const [showi, setShowi] = useState(1)
     const changePage = (val) => {
          console.log(val,"val");
@@ -83,7 +84,16 @@ const Employ = () => {
         );
         const json = await response.json();
         setEmp(json);
-        setShowi(page);
+        setShowi((page - 1) * 10 + 1);
+        if(json.length<10)
+        {
+            setNextE(json.length - 1);
+        }
+        if(json.length==0)
+        {
+            setShowi(0);
+            setNextE(0);
+        }
     }
     useEffect(() => {
         FetchEmp();
@@ -98,15 +108,15 @@ const Employ = () => {
     <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
         <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
         <tr>
-                <th scope="col" className="p-4">
+                {/* <th scope="col" className="p-4">
                     <div className="flex items-center">
                         <input id="checkbox-all-search" type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
                         <label for="checkbox-all-search" className="sr-only">checkbox</label>
                     </div>
-                </th>
+                </th>*/}
                 <th scope="col" className="px-6 py-3">
-                    Employ Name
-                </th>
+                Employ Name
+                </th> 
                 <th scope="col" className="px-6 py-3">
                     Age
                 </th>
@@ -135,12 +145,6 @@ const Employ = () => {
         </thead>
         <tbody>
         {emp.map(emps =><tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <td className="w-4 p-4">
-                    <div className="flex items-center">
-                        <input id="checkbox-table-search-1" type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
-                        <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
-                    </div>
-                </td>
                 <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                      {emps.name}
                 </th>
@@ -172,7 +176,7 @@ const Employ = () => {
         </tbody>
     </table>
     <nav className="flex items-center justify-between pt-4" aria-label="Table navigation">
-        <span className="text-sm font-normal text-gray-500 dark:text-gray-400">Showing <span className="font-semibold text-gray-900 dark:text-white">{(showi - 1) * 10 + 1}-{showi * 10}</span> of <span className="font-semibold text-gray-900 dark:text-white">1000</span></span>
+        <span className="text-sm font-normal text-gray-500 dark:text-gray-400">Showing <span className="font-semibold text-gray-900 dark:text-white">{showi}-{showi+nextE}</span> of <span className="font-semibold text-gray-900 dark:text-white">1000</span></span>
         <ul className="inline-flex items-center -space-x-px">
             <li>
                 <p onClick={() => prePage(i)} style={{cursor: "pointer"}} className="block px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
@@ -187,11 +191,10 @@ const Employ = () => {
                 <p onClick={() => changePage(i+1)} style={{cursor: "pointer"}} className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">{i+1}</p>
             </li>
             <li>
-                <p onClick={() => changePage(i+2)} style={{cursor: "pointer"}} aria-current="page" className="z-10 px-3 py-2 leading-tight text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white">{i+2}</p>
+                <p onClick={() => changePage(i+2)} style={{cursor: "pointer"}} className="px-3 py-2 leading-tight text-gray-500 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white">{i+2}</p>
             </li>
             <li>
-                <a href="#" className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">...</a>
-            </li>
+                <p className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">...</p>            </li>
             <li>
                 <p onClick={() => changePage(100)} style={{cursor: "pointer"}} className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">100</p>
             </li>
