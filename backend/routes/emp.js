@@ -71,6 +71,23 @@ router.post('/fetchemployee', async (req, res) => {
   }
 })
 
+router.post('/searchemp', async (req, res) => {
+  try {
+    let searchValue = req.body.searchValue;
+    let posts;
+    if(searchValue)
+    {
+       posts = await Employee.find({ name: req.body.searchValue })
+    }
+    console.log(posts);
+    res.status(200).json(posts);
+  }
+  catch (error) {
+    console.error(error.message);
+    res.status(500).send("internal server Error occured");
+  }
+})
+
 router.post('/rememp', async (req, res) => {
   try {
     let emps = await Employee.deleteOne({ email: req.body.email })
