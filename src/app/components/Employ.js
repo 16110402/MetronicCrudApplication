@@ -1,6 +1,7 @@
 import { React, useEffect, useState } from 'react'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import './employee.css';
 import Update from './Update';
 
 const Employ = () => {
@@ -55,6 +56,7 @@ const Employ = () => {
     const [emp, setEmp] = useState([])
     const [svalue, setSvalue] = useState("");
     const [page, setPage] = useState(1)
+    const [limit, setLimit] = useState(10)
     const [i, setI] = useState(1)
     const [nextE, setNextE] = useState(9)
     const [showi, setShowi] = useState(1)
@@ -79,12 +81,13 @@ const Employ = () => {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ page: page })
+                body: JSON.stringify({ page: page, pageLimit: limit })
             }
         );
         const json = await response.json();
         setEmp(json);
-        setShowi((page - 1) * 10 + 1);
+        setShowi((page - 1) * limit + 1);
+        setNextE(limit-1);
         if (json.length < 10) {
             setNextE(json.length - 1);
         }
@@ -93,11 +96,11 @@ const Employ = () => {
             setNextE(0);
         }
     }
-    const searchEmp = async(e) => {
+    const searchEmp = async (e) => {
         e.preventDefault();
         let searchValue = svalue.search;
-        console.log(svalue,searchValue,"searchValue")
-           const response = await fetch(
+        console.log(svalue, searchValue, "searchValue")
+        const response = await fetch(
             `http://localhost:5000/api/emp/searchemp`,
             {
                 method: "POST",
@@ -109,8 +112,8 @@ const Employ = () => {
         );
         const json = await response.json();
         setEmp(json);
-        setShowi((page - 1) * 10 + 1);
-        if (json.length < 10) {
+        setShowi((page - 1) * limit + 1);
+        if (json.length < limit) {
             setNextE(json.length - 1);
         }
         if (json.length == 0) {
@@ -120,6 +123,10 @@ const Employ = () => {
     }
     const onChange = (e) => {
         setSvalue(e.target.value);
+    }
+    const changeLimit = async (lt) => {
+        setLimit(lt);
+        FetchEmp();
     }
     useEffect(() => {
         FetchEmp();
@@ -131,10 +138,10 @@ const Employ = () => {
             <Update isOpen={showModal} toggle={changeSalary} vdata={vdata} />
 
             <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-            <div className="input-group">
-  <input type="search" onChange={onChange} name="search" id="search" className="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
-  <button type="button" onClick={searchEmp} className="btn btn-outline-primary">search</button>
-</div>
+                <div className="input-group">
+                    <input type="search" onChange={onChange} name="search" id="search" className="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+                    <button type="button" onClick={searchEmp} className="btn btn-outline-primary">search</button>
+                </div>
                 <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
@@ -191,7 +198,7 @@ const Employ = () => {
                                 {emps.city}
                             </td>
                             <td className="px-6 py-4">
-                                <p key={emps._id} onClick={() => changeSalary(emps._id)} value={emps._id} style={{ cursor: "pointer" }} className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</p>
+                                <p key={emps.email} onClick={() => changeSalary(emps.email)} value={emps.email} style={{ cursor: "pointer" }} className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</p>
                             </td>
                             <td className="px-6 py-4">
                                 <p key={emps.email} onClick={() => removeEmp(emps.email)} value={emps.email} style={{ cursor: "pointer" }} className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Remove</p>
@@ -200,6 +207,14 @@ const Employ = () => {
                     </tbody>
                 </table>
                 <nav className="flex items-center justify-between pt-4" aria-label="Table navigation">
+                    <div class="dropup">
+                        <button class="dropbtn">Change Page Limit</button>
+                        <div class="dropup-content">
+                            <p onClick={() => changeLimit(5)}>5</p>
+                            <p onClick={() => changeLimit(10)}>10</p>
+                            <p onClick={() => changeLimit(15)}>15</p>
+                        </div>
+                    </div>
                     <span className="text-sm font-normal text-gray-500 dark:text-gray-400">Showing <span className="font-semibold text-gray-900 dark:text-white">{showi}-{showi + nextE}</span> of <span className="font-semibold text-gray-900 dark:text-white">1000</span></span>
                     <ul className="inline-flex items-center -space-x-px">
                         <li>

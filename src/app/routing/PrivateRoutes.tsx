@@ -2,12 +2,17 @@ import {lazy, FC, Suspense} from 'react'
 import {Route, Routes, Navigate} from 'react-router-dom'
 import {MasterLayout} from '../../_metronic/layout/MasterLayout'
 import Index from '../components/Index';
+import Signup from '../components/Signup';
+import Employ from '../components/Employ';
+import Employee from '../components/Employee';
+import AdminLogin from '../components/AdminLogin';
 import TopBarProgress from 'react-topbar-progress-indicator'
 import {DashboardWrapper} from '../pages/dashboard/DashboardWrapper'
 import {MenuTestPage} from '../pages/MenuTestPage'
 import {getCSSVariableValue} from '../../_metronic/assets/ts/_utils'
 import {WithChildren} from '../../_metronic/helpers'
 import BuilderPageWrapper from '../pages/layout-builder/BuilderPageWrapper'
+import { Sign } from 'crypto';
 
 const PrivateRoutes = () => {
   const ProfilePage = lazy(() => import('../modules/profile/ProfilePage'))
@@ -24,6 +29,10 @@ const PrivateRoutes = () => {
         <Route path='auth/*' element={<Navigate to='/dashboard' />} />
         {/* Pages */}
         <Route path="/index" element={<Index />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/employ" element={<Employ />} />
+        <Route path="/employee" element={<Employee />} />
+        <Route path="/adminlogin" element={<AdminLogin />} />
         <Route path='dashboard' element={<DashboardWrapper />} />
         <Route path='builder' element={<BuilderPageWrapper />} />
         <Route path='menu-test' element={<MenuTestPage />} />
