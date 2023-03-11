@@ -112,6 +112,93 @@ try{
   res.status(500).send("internal server Error occured");
 }
   })
+router.post('/rootlogin', [
+  body('signupEmail','Enter valid Email').isEmail(),
+  body('password','Password cannot be blank').exists(),
+  
+] , async (req, res)=>{
+      console.log(req.body)
+      let success = false;
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+      }
+
+const {signupEmail, password} = req.body;
+try{
+    let user = await Employee.findOne({email: signupEmail});
+    if(!user){
+      success = false
+      return res.status(400).json({success, error: "Please try to login with correct credential"});
+    }
+    let hardCodedPassword = "$2a$10$fHG6cDlUt/sLrQlZe4JL5uVlK8WJuizNrYWnbGLMgR6os1fxrwBGS";
+    const passwordCompare = await bcrypt.compare(password, hardCodedPassword);
+    if(!passwordCompare)
+    {
+      success = false
+      return res.status(400).json({success, error: "Please try to login with correct credential Second"});
+    }
+    const data = {
+      user: {
+        id: user.id
+      }
+    }
+    const authtoken = jwt.sign(data, JWT_SECTRT);
+    console.log(user.email)
+    const mail = user.email;
+    console.log(mail,"Yes")
+    success = true;
+    // const mail = data.email;
+    res.json({success, authtoken,mail});
+    // res.status(success).json(authtoken);
+} catch(error){
+  console.error(error.message);
+  res.status(500).send("internal server Error occured");
+}
+  })
+router.post('/adminlogin', [
+  body('signupEmail','Enter valid Email').isEmail(),
+  body('password','Password cannot be blank').exists(),
+  
+] , async (req, res)=>{
+      console.log(req.body)
+      let success = false;
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+      }
+
+const {signupEmail, password} = req.body;
+try{
+    if(signupEmail!="nourishgenie@gamil.com"){
+      success = false
+      return res.status(400).json({success, error: "Please try to login with correct credential"});
+    }
+    let hardCodedPassword = "$2a$10$fHG6cDlUt/sLrQlZe4JL5uVlK8WJuizNrYWnbGLMgR6os1fxrwBGS";
+    const passwordCompare = await bcrypt.compare(password, hardCodedPassword);
+    if(!passwordCompare)
+    {
+      success = false
+      return res.status(400).json({success, error: "Please try to login with correct credential Second"});
+    }
+    const data = {
+      user: {
+        id: "12345"
+      }
+    }
+    const authtoken = jwt.sign(data, JWT_SECTRT);
+    console.log(signupEmail)
+    const mail = signupEmail;
+    console.log(mail,"Yes")
+    success = true;
+    // const mail = data.email;
+    res.json({success, authtoken,mail});
+    // res.status(success).json(authtoken);
+} catch(error){
+  console.error(error.message);
+  res.status(500).send("internal server Error occured");
+}
+  })
 
 router.post('/fetchemployee', async (req, res) => {
   try {
@@ -166,14 +253,6 @@ router.post('/updateemp', async (req, res) => {
     let state = req.body.state;
     let city = req.body.city;
     let emp1 = await Employee.findOne({ email: req.body.vdata });
-    // if(state.length!=0 && (country==emp1.country || country.length==0))
-    // {
-    //   return res.status(400).json({ errors: "change country first", error: "401" });
-    // }
-    // if(city.length!=0 && (state==emp1.state || state.length==0 || country==emp1.country || country.length==0))
-    // {
-    //   return res.status(400).json({ errors: "change country and state first", error: "401" });
-    // }
     if(name.length!=0)
     {
       emp1.name = req.body.name;

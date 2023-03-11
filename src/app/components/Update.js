@@ -89,10 +89,8 @@ const Update = (props) => {
         credentials.country = json.country;
         credentials.state = json.state;
         credentials.city = json.city;
-        // console.log(json,"json");
     }
     const onChange = (e) => {
-        // setCredentials({name:"e.target.name" , district:"e.target.email", place:"e.target.district", nearground:"e.target.nearground", distance:"e.target.distance" ,password:"e.target.password",confirmpassword:"e.target.confirmpassword"})
         let t2 = "";
         if(e.target.name=="country")        
         {
@@ -111,7 +109,6 @@ const Update = (props) => {
                 t2 = t2+vc[j];
                 j++;
             }
-            // console.log(states);
             let p1 = [];
             for(let i=0;i<states.length;i++)
             {
@@ -164,6 +161,7 @@ const Update = (props) => {
     }, []);
     return (
         <div className="container" style={{ marginTop: "100px" }}>
+            <ToastContainer />
             <Modal
                 isOpen={props.isOpen}
                 contentLabel="Example Modal" >

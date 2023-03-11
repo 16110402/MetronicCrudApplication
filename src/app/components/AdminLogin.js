@@ -10,42 +10,41 @@ const AdminLogin = () => {
     let navigate = useNavigate();
     const handleSubmit = async (e) => {
         e.preventDefault();
-        navigate("/employ");
-        // console.log(credentials,"credentials")
-        // const response = await fetch(`http://localhost:5000/api/emp/login`, {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify({ signupEmail: credentials.signupEmail, password: credentials.password })
-        // });
-        // const json = await response.json();
-        // const mail = json.mail;
-        // let authtoken = json.authtoken
-        // if (authtoken) {
-        //     // save the auth and redirect
-        //     console.log(mail,"mail");
-        //     localStorage.setItem('token', mail);
-        //     navigate("/employee");
-        //     // props.sucReg(2);
-        // }
-        // else {
-        //     toast.error('You are not registered yet!', {
-        //         position: "top-right",
-        //         autoClose: 5000,
-        //         hideProgressBar: false,
-        //         closeOnClick: true,
-        //         pauseOnHover: true,
-        //         draggable: true,
-        //         progress: undefined,
-        //     });
-        // }
+        // navigate("/employ");
+        console.log(credentials,"credentials")
+        const response = await fetch(`http://localhost:5000/api/emp/adminlogin`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ signupEmail: credentials.signupEmail, password: credentials.password })
+        });
+        const json = await response.json();
+        const mail = json.mail;
+        let authtoken = json.authtoken
+        if (authtoken) {
+            // save the auth and redirect
+            localStorage.setItem('token', mail);
+            navigate("/employ");
+        }
+        else {
+            toast.error('You are not registered as admin! You cannot access List', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        }
     }
     const onChange = (e) => {
         setCredentials({ ...credentials, [e.target.name]: e.target.value })
     }
     return (
         <div className="container">
+            <ToastContainer />
             <section className="bg-gray-50 dark:bg-gray-900">
                 <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
                     <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">

@@ -5,7 +5,9 @@ import Index from '../components/Index';
 import Signup from '../components/Signup';
 import Employ from '../components/Employ';
 import Employee from '../components/Employee';
+import RootLogin from '../components/RootLogin';
 import AdminLogin from '../components/AdminLogin';
+import AdminEmployee from '../components/AdminEmployee';
 import TopBarProgress from 'react-topbar-progress-indicator'
 import {DashboardWrapper} from '../pages/dashboard/DashboardWrapper'
 import {MenuTestPage} from '../pages/MenuTestPage'
@@ -33,6 +35,8 @@ const PrivateRoutes = () => {
         <Route path="/employ" element={<Employ />} />
         <Route path="/employee" element={<Employee />} />
         <Route path="/adminlogin" element={<AdminLogin />} />
+        <Route path="/rootlogin" element={<RootLogin />} />
+        <Route path="/adminemployee" element={<AdminEmployee />} />
         <Route path='dashboard' element={<DashboardWrapper />} />
         <Route path='builder' element={<BuilderPageWrapper />} />
         <Route path='menu-test' element={<MenuTestPage />} />

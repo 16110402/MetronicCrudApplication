@@ -1,11 +1,13 @@
 import { React, useEffect, useState } from 'react'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from "react-router-dom";
 import './employee.css';
 import Update from './Update';
 
 const Employ = () => {
 
+    let navigate = useNavigate();
     const [showModal, setShowModal] = useState(false);
     const [vdata, setVdata] = useState("");
     const changeSalary = (ids) => {
@@ -17,7 +19,6 @@ const Employ = () => {
         }
     }
     const removeEmp = async (emailt) => {
-        console.log(emailt, "emailt");
 
         const response = await fetch(
             `http://localhost:5000/api/emp/rememp`,
@@ -61,12 +62,14 @@ const Employ = () => {
     const [nextE, setNextE] = useState(9)
     const [showi, setShowi] = useState(1)
     const changePage = (val) => {
-        console.log(val, "val");
         setPage(val);
         FetchEmp();
     }
     const nextPage = (val) => {
-        setI(++val);
+        if(val<=1000)
+        {
+          setI(++val);
+        }
     }
     const prePage = (val) => {
         if (val >= 2) {
@@ -99,7 +102,6 @@ const Employ = () => {
     const searchEmp = async (e) => {
         e.preventDefault();
         let searchValue = svalue.search;
-        console.log(svalue, searchValue, "searchValue")
         const response = await fetch(
             `http://localhost:5000/api/emp/searchemp`,
             {
@@ -128,6 +130,12 @@ const Employ = () => {
         setLimit(lt);
         FetchEmp();
     }
+    const logout = () => {
+        localStorage.removeItem('token');
+        // setEmail_id("");
+        navigate("/index");
+        // props.sucReg(3);
+    }
     useEffect(() => {
         FetchEmp();
     }, []);
@@ -141,6 +149,8 @@ const Employ = () => {
                 <div className="input-group">
                     <input type="search" onChange={onChange} name="search" id="search" className="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
                     <button type="button" onClick={searchEmp} className="btn btn-outline-primary">search</button>
+                    <button type="button" onClick={logout} className="btn btn-primary">Logout</button>
+                    {/* <button type="button" className="btn btn-primary">Primary</button> */}
                 </div>
                 <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">

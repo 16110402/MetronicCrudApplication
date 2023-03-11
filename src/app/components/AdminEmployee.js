@@ -1,23 +1,12 @@
 import { React, useEffect, useState } from "react";
 import { Link, useNavigate } from 'react-router-dom';
-import Update from './Update';
 
-const Employee = () => {
+const AdminEmployee = () => {
 
     const [user, setUser] = useState({});
-    const [showModal, setShowModal] = useState(false);
-    const [vdata, setVdata] = useState("");
     const [myfile, setMyfile] = useState('');
-    const changeSalary = (ids) => {
-        if (showModal) {
-            setShowModal(false);
-        } else {
-            setShowModal(true);
-        }
-    }
     const FetchEmp = async () => {
         let p2 = localStorage.getItem('token');
-        setVdata(p2);
         const response = await fetch(
             `http://localhost:5000/api/emp/getemp`,
             {
@@ -34,18 +23,30 @@ const Employee = () => {
     let navigate = useNavigate();
     const logout = () => {
         localStorage.removeItem('token');
+        // setEmail_id("");
         navigate("/index");
-    }
-    const handleFile = (e) => {
-        setMyfile({...myfile, file: e.target.files[0]});
+        // props.sucReg(3);
     }
     useEffect(() => {
         FetchEmp();
     }, []);
     return (
         <div className="container">
-              <Update isOpen={showModal} toggle={changeSalary} vdata={vdata} />
+              <h2>Admin Logged In</h2>
             <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                {/* <div className="flex justify-end px-4 pt-4">
+        <button id="dropdownButton" data-dropdown-toggle="dropdown" className="inline-block text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-1.5" type="button">
+            <span className="sr-only">Open dropdown</span>
+            <svg className="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z"></path></svg>
+        </button>
+        <div id="dropdown" className="z-10 hidden text-base list-none bg-black divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+            <ul className="py-2" aria-labelledby="dropdownButton">
+            <li>
+                <a href="#" className="block px-4 py-2 text-sm text-black-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Edit</a>
+            </li>
+            </ul>
+        </div>
+    </div> */}
                 <div className="flex flex-col items-center pb-10 py-4">
                     {/* <img className="w-24 h-24 mb-3 rounded-full shadow-lg" src="/docs/images/people/profile-picture-3.jpg" alt="Bonnie image"/> */}
                     <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">{user.name}</h5>
@@ -54,20 +55,8 @@ const Employee = () => {
                     <span className="text-sm text-gray-500 dark:text-gray-400">Country - {user.country}</span>
                     <span className="text-sm text-gray-500 dark:text-gray-400">State - {user.state}</span>
                     <span className="text-sm text-gray-500 dark:text-gray-400">City - {user.city}</span>
-                    <div className="row my-2">
-                        <div className="col" style={{width: "200px"}}>
-                            <input type="file" name="file" onChange={handleFile} className="form-control" id="customFile" />
-                        </div>
-                        <div className="col">
-                            <button type="submit" className="group relative my-3 flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                                <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-                                </span>
-                                Upload
-                            </button>
-                        </div>
-                    </div>
                     <div className="flex mt-4 space-x-3 md:mt-6">
-                        <p style={{cursor: "pointer"}} onClick={() => changeSalary(user.email)} className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Update</p>
+                        {/* <p style={{cursor: "pointer"}} className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Update</p> */}
                         <p style={{ cursor: "pointer" }} onClick={logout} className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-700 dark:focus:ring-gray-700">Logout</p>
                     </div>
                 </div>
@@ -77,4 +66,4 @@ const Employee = () => {
     )
 }
 
-export default Employee
+export default AdminEmployee
