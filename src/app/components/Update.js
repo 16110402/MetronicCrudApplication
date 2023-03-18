@@ -1,11 +1,13 @@
 import { React, useEffect, useState } from 'react'
 import Modal from 'react-modal';
 import { ToastContainer, toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom'
 import { Country, State, City } from 'country-state-city'
 import 'react-toastify/dist/ReactToastify.css';
 
 const Update = (props) => {
 
+    let navigate = useNavigate()
     const [credentials, setCredentials] = useState({name: "", age: "", salary: "", country: "", state: "", city: ""});
 
     const [country, setCountry] = useState([])
@@ -15,8 +17,32 @@ const Update = (props) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log(credentials,"credentials");
-        const { name, age, salary, country, state, city } = credentials;
-        let vdata = props.vdata;
+        let name="", age = "", salary = "", country = "", state = "", city = "", vdata = props.vdata.email;
+        if((credentials.name).length!=0)
+        {
+            name = credentials.name;
+        }
+        if((credentials.age).length!=0)
+        {
+            age = credentials.age;
+        }
+        if((credentials.salary).length!=0)
+        {
+            salary = credentials.salary;
+        }
+        if((credentials.country).length!=0)
+        {
+            country = credentials.country;
+        }
+        if((credentials.state).length!=0)
+        {
+            state = credentials.state;
+        }
+        if((credentials.city).length!=0)
+        {
+            city = credentials.city;
+        }
+        console.log(credentials,"cred");
         const response = await fetch(`http://localhost:5000/api/emp/updateemp`, {
             method: 'POST',
             headers: {
@@ -60,7 +86,7 @@ const Update = (props) => {
             });
         }
         else {
-            toast.error('Your record are not inserted!', {
+            toast.error(json.error, {
                 position: "top-right",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -70,25 +96,6 @@ const Update = (props) => {
                 progress: undefined,
             });
         }
-    }
-    const FetchEmp = async () => {
-        const response = await fetch(
-            `http://localhost:5000/api/emp/getemp`,
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ email: props.vdata })
-            }
-        );
-        const json = await response.json();
-        credentials.name = json.name;
-        credentials.age = json.age;
-        credentials.salary = json.salary;
-        credentials.country = json.country;
-        credentials.state = json.state;
-        credentials.city = json.city;
     }
     const onChange = (e) => {
         let t2 = "";
@@ -157,7 +164,6 @@ const Update = (props) => {
            p.push({countryCode: countries[i].isoCode, name: countries[i].name});
     }
     setCountry(p);
-    FetchEmp();
     }, []);
     return (
         <div className="container" style={{ marginTop: "100px" }}>
@@ -177,28 +183,28 @@ const Update = (props) => {
                             <div className=" flex lg:flex-row flex-col">
                                 <div className="m-6">
                                     <p className="text-sm text-stone-400">Full Name</p> <input
-                                        onChange={onChange} type="text" id="name" name="name" className="border-b-2 border-stone-400 text-stone-400 w-36" />
+                                        onChange={onChange} type="text" id="name" name="name" placeholder={props.vdata.name} className="border-b-2 border-stone-400 text-stone-400 w-36" />
                                     <p className="text-sm text-stone-400 mt-6">Age</p> <input
-                                        onChange={onChange} type="number" id="age" name="age" className="border-b-2 border-stone-400 text-stone-400 w-36" />
+                                        onChange={onChange} type="number" id="age" name="age" placeholder={props.vdata.age} className="border-b-2 border-stone-400 text-stone-400 w-36" />
                                     <select className="form-select my-3" name="country" defaultValue={'DEFAULT'} onChange={onChange} aria-label="Default select example">
-                                        <option value="Default">Choose Your Country</option>
+                                        <option value="Default">{props.vdata.country}</option>
                                         {country.map(place1 => <option key={place1.name} value={[place1.countryCode,place1.name]}>{place1.name}</option>)}
                                     </select>
                                 </div>
                                 <div className="m-6 ">
                                     <p className="text-sm text-stone-400">E-mail</p> <input
-                                        onChange={onChange} type="email" id="email" name="email" className="border-b-2 border-stone-400 text-stone-400 w-36" />
+                                        onChange={onChange} type="email" id="email" name="email" placeholder={props.vdata.email} className="border-b-2 border-stone-400 text-stone-400 w-36" disabled/>
                                     <p className="text-sm text-stone-400 mt-6">Salary</p> <input
-                                        onChange={onChange} type="number" id="salary" name="salary" className="border-b-2 border-stone-400 text-stone-400 w-36" />
+                                        onChange={onChange} type="number" id="salary" name="salary" placeholder={props.vdata.salary} className="border-b-2 border-stone-400 text-stone-400 w-36" />
                                         <select className="form-select my-3" defaultValue={'DEFAULT'} name="state" onChange={onChange} aria-label="Default select example">
-                                        <option value="Default">Choose Your State</option>
+                                        <option value="Default">{props.vdata.state}</option>
                                         {state.map(place2 => <option key={place2.name} value={[place2.stateCode,place2.name]}>{place2.name}</option>)}
                                     </select>
                                 </div>
                             </div>
                             <div className="m-6 ">
                                     <select className="form-select my-3" name="city" onChange={onChange} aria-label="Default select example">
-                                        <option selected>Choose Your City</option>
+                                        <option selected>{props.vdata.city}</option>
                                         {city.map(place3 => <option key={place3} value={place3}>{place3}</option>)}
                                     </select>
                                 <button type="submit" onClick={handleSubmit} className="group relative my-3 flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">

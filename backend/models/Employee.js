@@ -35,9 +35,9 @@ const employeeSchema = new Schema({
         type: String,
         required: true
     },
-    file:{
-		type: String
-	},
+    file:[{
+		emp_file: {type: String}
+    }],
     date:{
         type: Date,
         default: Date.now

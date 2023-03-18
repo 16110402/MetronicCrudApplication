@@ -4,16 +4,38 @@ import Update from './Update';
 
 const AdminEmployee = () => {
 
+    const [credential, setCredential] = useState({name: "", age: "", salary: "", email: "", country: "", state: "", city: ""});
     const [user, setUser] = useState({});
     const [showModal, setShowModal] = useState(false);
     const [vdata, setVdata] = useState("");
-    const changeSalary = () => {
-        if (showModal) {
-            setShowModal(false);
-        } else {
-            setShowModal(true);
-        }
+    const changeSalary = async() => {
+        // setVdata(ids);
+    if (showModal) {
+        FetchEmp();
+        setShowModal(false);
+    } else {
+        const response = await fetch(
+            `http://localhost:5000/api/emp/getemp`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ email: vdata })
+            }
+        );
+        const json = await response.json();
+        credential.email = vdata;
+        credential.name = json.name;
+        credential.age = json.age;
+        credential.salary = json.salary;
+        credential.country = json.country;
+        credential.state = json.state;
+        credential.city = json.city;
+        console.log(credential,"c");
+        setShowModal(true);
     }
+}
     const FetchEmp = async () => {
         let p2 = localStorage.getItem('token');
         setVdata(p2);
@@ -52,7 +74,7 @@ const AdminEmployee = () => {
     }, []);
     return (
         <div className="container">
-            <Update isOpen={showModal} toggle={changeSalary} vdata={vdata} />
+            <Update isOpen={showModal} toggle={changeSalary} vdata={credential} />
               <h2>Admin Logged In</h2>
             <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                 <div className="flex flex-col items-center pb-10 py-4">

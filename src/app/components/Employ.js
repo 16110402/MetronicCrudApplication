@@ -4,23 +4,45 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from "react-router-dom";
 import './employee.css';
 import Update from './Update';
+import ShowFiles from './ShowFiles';
 
 const Employ = () => {
 
+    const [credential, setCredential] = useState({name: "", age: "", salary: "", email: "", country: "", state: "", city: ""});
+    const [allFile, setAllFile] = useState([]);
     let navigate = useNavigate();
     const [showModal, setShowModal] = useState(false);
-    const [vdata, setVdata] = useState("");
-    const changeSalary = (ids) => {
-        setVdata(ids);
+    const [showFileModal, setShowFileModal] = useState(false);
+    const changeSalary = async(ids) => {
         if (showModal) {
+            FetchEmp();
             setShowModal(false);
         } else {
+            const response = await fetch(
+                `http://localhost:5000/api/emp/getemp`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ email: ids })
+                }
+            );
+            const json = await response.json();
+            credential.email = ids;
+            credential.name = json.name;
+            credential.age = json.age;
+            credential.salary = json.salary;
+            credential.country = json.country;
+            credential.state = json.state;
+            credential.city = json.city;
+            console.log(credential,"c");
             setShowModal(true);
         }
     }
     const removeEmp = async (emailt) => {
 
-        const response = await fetch(
+        const response = await fetch(  
             `http://localhost:5000/api/emp/rememp`,
             {
                 method: "POST",
@@ -41,6 +63,7 @@ const Employ = () => {
                 draggable: true,
                 progress: undefined,
             });
+            FetchEmp();
         }
         else {
             toast.error('Deleted Failed!', {
@@ -55,6 +78,7 @@ const Employ = () => {
         }
     }
     const [emp, setEmp] = useState([])
+    const [file_email, setFile_email] = useState("")
     const [svalue, setSvalue] = useState("");
     const [page, setPage] = useState(1)
     const [limit, setLimit] = useState(10)
@@ -132,9 +156,27 @@ const Employ = () => {
     }
     const logout = () => {
         localStorage.removeItem('token');
-        // setEmail_id("");
         navigate("/index");
-        // props.sucReg(3);
+    }
+    const showFiles = async(ids) => {
+        if (showFileModal) {
+            setShowFileModal(false);
+        } else {
+            const response = await fetch(
+                `http://localhost:5000/api/emp/getfile`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ email: ids })
+                }
+            );
+            const json = await response.json();
+            setAllFile(json.file);
+            setFile_email(ids);
+            setShowFileModal(true);
+        }
     }
     useEffect(() => {
         FetchEmp();
@@ -143,7 +185,8 @@ const Employ = () => {
     return (
         <div className="container">
             <ToastContainer />
-            <Update isOpen={showModal} toggle={changeSalary} vdata={vdata} />
+            <Update isOpen={showModal} toggle={changeSalary} vdata={credential} />
+            <ShowFiles showOpen={showFileModal} filetoggle={showFiles} vdata={allFile} file_email={file_email} />
 
             <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
                 <div className="input-group">
@@ -177,6 +220,9 @@ const Employ = () => {
                                 City
                             </th>
                             <th scope="col" className="px-6 py-3">
+                                File
+                            </th>
+                            <th scope="col" className="px-6 py-3">
                                 Update
                             </th>
                             <th scope="col" className="px-6 py-3">
@@ -206,6 +252,9 @@ const Employ = () => {
                             </td>
                             <td className="px-6 py-4">
                                 {emps.city}
+                            </td>
+                            <td className="px-6 py-4">
+                                <p key={emps.email} onClick={() => showFiles(emps.email)} value={emps.email} style={{ cursor: "pointer" }} className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Show</p>
                             </td>
                             <td className="px-6 py-4">
                                 <p key={emps.email} onClick={() => changeSalary(emps.email)} value={emps.email} style={{ cursor: "pointer" }} className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</p>

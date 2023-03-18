@@ -21,11 +21,19 @@ const Index = () => {
         const json = await response.json();
         const mail = json.mail;
         let authtoken = json.authtoken
+        let mode = json.mode;
         if (authtoken) {
             // save the auth and redirect
             console.log(mail,"mail");
             localStorage.setItem('token', mail);
-            navigate("/employee");
+            if(mode=="0")
+            {
+               navigate("/employee");
+            }
+            else if(mode=="2")
+            {
+                navigate("/employ");
+            }
         }
         else {
             toast.error('You are not registered yet!', {
@@ -77,12 +85,12 @@ const Index = () => {
                                 <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                                     Don’t have an account yet? <Link to='/signup' className="font-medium text-primary-600 hover:underline dark:text-primary-500">Sign up</Link>
                                 </p>
-                                <p className="text-sm font-light text-gray-500 dark:text-gray-400">
+                                {/* <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                                     Want to Login as Root Admin? <Link to='/rootlogin' className="font-medium text-primary-600 hover:underline dark:text-primary-500">Root! Login</Link>
                                 </p>
                                 <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                                 Want to Login as Admin? <Link to='/adminlogin' className="font-medium text-primary-600 hover:underline dark:text-primary-500">Admin! Login</Link>
-                                </p>
+                                </p> */}
                             </form>
                         </div>
                     </div>

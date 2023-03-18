@@ -131,7 +131,7 @@ const Signup = () => {
     return (
         <div>
             <ToastContainer />
-            <div className="grid md:block ">
+            <div className="grid md:block my-5">
                 <div className="bg-gradient-to-r from-cyan-500 to-blue-500 h-72 flex justify-center w-full">
                     <div className="mt-10 text-4xl font-bold">GET IN TOUCH</div>
                 </div>
